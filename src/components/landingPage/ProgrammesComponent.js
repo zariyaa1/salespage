@@ -14,6 +14,7 @@ const ZariyaaOfferingProgramsComponent = () => {
 
             <div className="flex flex-col gap-2">
 
+
                 <div className="flex flex-col gap-5 ">
                     <AnimatedProgramComponent
                         title={'Wellness Festivals'}
