@@ -1,23 +1,42 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { MdOutlinePlayArrow } from "react-icons/md";
+import { FaArrowRight } from "react-icons/fa";
 
+import { useState, useEffect } from "react";
+
+import { motion } from "motion/react"
 
 const HeroSection = () => {
+    return (
+        <>
+            <div className="relative">
 
-    return (<>
+                <div className="min-h-screen bg-[url('/completeteam.png')] bg-cover bg-center">
+                    <Header />
+                    <div className="flex justify-center items-center h-96 ">
+                        <IntroVideoComponent />
+                    </div>
+                </div>
 
-        <div>
 
-            <div className="min-h-screen bg-[url('/completeteam.png')] bg-cover bg-center">
+                <div className="absolute -bottom-2 w-full flex justify-center items-center py-10">
+                    <CallToActionComponent />
+                </div>
 
-                <Header />
-                <IntroVideoComponent />
+                <div className="h-20 bg-white">
+
+                </div>
             </div>
-            <CallToActionComonent />
-            <CompaniesWorkedWithZariyaaComponent />
-        </div>
-    </>);
+            <div className="bg-white py-6">
+                <CompaniesWorkedWithZariyaaComponent />
+            </div>
+        </>
+    );
 };
+
+
 
 export default HeroSection;
 
@@ -25,7 +44,7 @@ const Header = () => {
 
     return (<>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center px-5 py-2">
             <ZariyaaLogo />
             <Navigation />
         </div>
@@ -92,18 +111,16 @@ const ZariyaaLogo = () => {
 const Navigation = () => {
     return (<>
 
-        <ul>
+        <ul className="flex gap-3 justify-center items-center text-white">
 
             <li> <Link href={'/'}>Home</Link></li>
             <li> <Link href={'/'}>Our Programs</Link></li>
             <li> <Link href={'/'}>Reviews</Link></li>
             <li> <Link href={'/'}>About us</Link></li>
-            <li> <CallToActionButton></CallToActionButton>  </li>
+            <li> <NavCallToActionButton></NavCallToActionButton>  </li>
         </ul>
     </>)
 }
-
-
 
 const CompaniesWorkedWithZariyaaComponent = () => {
     const companies = [
@@ -333,8 +350,8 @@ const CompaniesWorkedWithZariyaaComponent = () => {
     ];
 
     return (
-        <div className="text-center py-8 bg-gray-100">
-            <p className="text-xl font-semibold mb-4">Loved by leading organisations worldwide.</p>
+        <div className="text-center py-8">
+            <p className="text-xl font-semibold mb-4 text-gray-">Loved by leading organisations worldwide.</p>
             <div className="flex justify-center items-center gap-6 flex-wrap">
                 {companies.map((company, index) => (
                     <a
@@ -352,29 +369,74 @@ const CompaniesWorkedWithZariyaaComponent = () => {
     );
 };
 
-const CallToActionComonent = () => {
 
-    const HappinessEntitiesList = ["organisation", "employee", "home", "institution"]
+const AnimatedText = ({ entities, duration = 1500 }) => {
+    const [index, setIndex] = useState(0);
 
-    return (<>
-        <div>
-            <div><p>Bringing lasting happiness to your    <span>{HappinessEntitiesList[0]}</span>  </p> </div>
-            <div><p>We compassionately create wellness programs and mindfulness spaces to improve holistic wellbeing</p></div>
-            <div><CallToActionButton /></div>
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prevIndex) => (prevIndex + 1) % entities.length);
+        }, duration);
+
+        return () => clearInterval(interval);
+    }, [entities, duration]);
+
+    return (
+        <motion.p
+            key={index}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.7 }}
+            className="bg-gradient-to-r from-[#FF00A1] to-[#2100AA] bg-clip-text text-transparent"
+        >
+            {entities[index]}
+        </motion.p>
+    );
+};
+
+const CallToActionComponent = () => {
+    const HappinessEntitiesList = ["organisation", "employee", "home", "institution"];
+
+    return (
+        <div className="p-5 bg-white text-center flex flex-col gap-5 rounded-4xl w-5/6">
+            <div className="text-[#2E2763] justify-center items-center font-extrabold text-4xl flex gap-2">
+                <p>Bringing lasting happiness to your</p>
+                <AnimatedText entities={HappinessEntitiesList} duration={1500} />
+            </div>
+
+            <div>
+                <p className="text-[#2E2763]">
+                    We compassionately create wellness programs and mindfulness spaces to improve holistic wellbeing
+                </p>
+            </div>
+
+            <div className="flex justify-center items-center">
+                <CallToActionButton />
+            </div>
         </div>
-    </>)
-}
+    );
+};
 
-const CallToActionButton = () => {
+
+const NavCallToActionButton = () => {
+
     return (<>
-
-        <button>Contact us for demo</button>
+        <button className="bg-white rounded-4xl text-black px-4 py-2  ">Contact us for demo</button>
     </>)
 }
+const CallToActionButton = () => {
+
+    return (<>
+        <div className=" rounded-4xl text-white px-4 py-2   flex gap-3 bg-[#2E2763] items-center  font-bold hover:bg-gradient-to-r from-[#3B82F6] from-0%  via-[#7C00FE]  via-50% to-[#BC60FB] to-100%"><p>Contact us for demo</p>    <FaArrowRight /></div>
+    </>)
+}
+
+
 
 const IntroVideoComponent = () => {
     return (<>
 
-        <button>  &#9654;How  we make people happy</button>
+        <button className="text-white  border-1 rounded-full px-4 py-2 flex justify-center items-center ">  <MdOutlinePlayArrow className="text-2xl" />How  we make people happy</button>
     </>)
 }
